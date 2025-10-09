@@ -1,0 +1,34 @@
+{
+  "name": "caddy-redirect",
+  "version": "0.1.0",
+  "description": "Flexible Docker container based on Caddy for reverse proxy with environment variable configuration",
+  "main": "index.js",
+  "scripts": {
+    "test": "./test.sh",
+    "validate": "make validate",
+    "prepare": "husky install",
+    "commitlint": "commitlint --edit $1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielgtmn/caddy-redirect.git"
+  },
+  "keywords": [
+    "docker",
+    "caddy",
+    "reverse-proxy",
+    "load-balancer",
+    "container"
+  ],
+  "author": "Daniel Gietmann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielgtmn/caddy-redirect/issues"
+  },
+  "homepage": "https://github.com/danielgtmn/caddy-redirect#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "husky": "^8.0.3"
+  }
+}

@@ -229,21 +229,42 @@ docker run -d --name caddy-redirect \
 
 This repository includes GitHub Actions workflows that automatically build and push Docker images to GitHub Container Registry (GHCR).
 
-### Automatic Builds
+### Automatic Builds & Releases
 
 Images are automatically built and pushed when:
 - Pushing to the `main` branch
-- Creating tags (e.g., `v1.0.0`)
 - Opening pull requests
+
+**Releases are automatically created** when commits follow [Conventional Commit](https://conventionalcommits.org/) format:
+- `feat:` commits trigger minor version bumps
+- `fix:` commits trigger patch version bumps
+- `feat!:` or `BREAKING CHANGE:` trigger major version bumps
 
 ### Image Tags
 
 Available tags in `ghcr.io/danielgtmn/caddy-redirect`:
 - `latest` - Latest build from main branch
 - `main` - Latest build from main branch
-- `v1.2.3` - Specific version tags
+- `v1.2.3` - Specific version tags (auto-generated)
 - `v1.2` - Major.minor version tags
 - `v1` - Major version tags
+
+### Example Release Flow
+
+```bash
+# Make changes
+git add .
+git commit -m "feat: add support for custom headers"
+
+# Push to main
+git push origin main
+
+# → GitHub Actions automatically:
+#   1. Runs tests
+#   2. Builds and pushes Docker image
+#   3. Creates GitHub release (e.g., v1.1.0)
+#   4. Updates CHANGELOG.md
+```
 
 ### Using Built Images
 
@@ -333,6 +354,54 @@ The tests cover:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Development Setup
+
+1. **Install dependencies:**
+   ```bash
+   pnpm install  # or npm install
+   ```
+
+2. **Initialize Husky hooks:**
+   ```bash
+   pnpm run prepare  # or npm run prepare
+   ```
+
+### Commit Convention
+
+This project uses [Conventional Commits](https://conventionalcommits.org/) for automated version management and releases. Commit messages are automatically validated using Husky and Commitlint.
+
+**Valid commit types:**
+```bash
+# Features
+feat: add new functionality
+
+# Bug fixes
+fix: resolve issue with proxy headers
+
+# Documentation
+docs: update README with new examples
+
+# Build/CI changes
+build: update Dockerfile
+ci: modify GitHub Actions workflow
+
+# Breaking changes
+feat!: change API that breaks backward compatibility
+
+# Other changes
+chore: update dependencies
+refactor: restructure code
+test: add tests
+style: format code
+perf: improve performance
+```
+
+**Pre-commit hooks will:**
+- ✅ Validate Caddyfile syntax
+- ✅ Check commit message format
+
+**Invalid commits will be rejected automatically.**
 
 ### For Fork Users
 
