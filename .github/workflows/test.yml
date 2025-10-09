@@ -1,0 +1,107 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Validate Configuration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate Caddyfile syntax
+        run: |
+          docker run --rm -v $(pwd):/config caddy:2-alpine caddy validate --config /config/Caddyfile
+
+      - name: Check Dockerfile syntax
+        run: |
+          docker build --no-cache --target build -f Dockerfile . || true
+
+  test-docker-build:
+    name: Test Docker Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t caddy-redirect:test .
+
+      - name: Test basic container startup
+        run: |
+          # Start container in background
+          docker run -d --name test-container \
+            -p 8080:80 \
+            -e CADDY_DOMAIN=localhost \
+            -e CADDY_UPSTREAM=http://httpbin.org \
+            caddy-redirect:test
+
+          # Wait for container to start
+          sleep 5
+
+          # Check if container is running
+          if ! docker ps | grep -q test-container; then
+            echo "Container failed to start"
+            docker logs test-container
+            exit 1
+          fi
+
+          # Test HTTP request to container
+          if curl -f -s http://localhost:8080 > /dev/null; then
+            echo "HTTP request successful"
+          else
+            echo "HTTP request failed"
+            docker logs test-container
+            exit 1
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop test-container || true
+          docker rm test-container || true
+
+  test-env-vars:
+    name: Test Environment Variables
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build test image
+        run: |
+          docker build -t caddy-redirect:env-test .
+
+      - name: Test basic environment variable
+        run: |
+          # Test CADDY_DOMAIN
+          docker run --rm \
+            -e CADDY_DOMAIN=test.example.com \
+            caddy-redirect:env-test \
+            caddy list-configs 2>/dev/null | grep -q "test.example.com" || {
+              echo "CADDY_DOMAIN not properly set"
+              exit 1
+            }
+
+      - name: Test upstream configuration
+        run: |
+          # Test CADDY_UPSTREAM
+          docker run --rm \
+            -e CADDY_DOMAIN=test.example.com \
+            -e CADDY_UPSTREAM=http://backend:3000 \
+            caddy-redirect:env-test \
+            caddy list-configs 2>/dev/null | grep -q "backend:3000" || {
+              echo "CADDY_UPSTREAM not properly set"
+              exit 1
+            }

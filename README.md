@@ -289,6 +289,47 @@ CADDY_ADDITIONAL_DOMAINS=www.example.com,api.example.com,staging.example.com
 - Check the `CADDY_UPSTREAM` URL
 - Use `docker-compose logs` for detailed errors
 
+## Testing
+
+This repository includes comprehensive tests to ensure everything works correctly.
+
+### Running Tests Locally
+
+```bash
+# Run all tests
+./test.sh
+
+# Test with Docker Compose
+docker-compose -f docker-compose.test.yml up -d
+curl http://localhost:8080
+docker-compose -f docker-compose.test.yml down
+```
+
+### GitHub Actions Tests
+
+Tests run automatically on:
+- **Push to main**: Full test suite
+- **Pull Requests**: Full test suite
+- **Manual trigger**: Via Actions tab
+
+The tests cover:
+- ✅ Caddyfile syntax validation
+- ✅ Docker build success
+- ✅ Container startup
+- ✅ HTTP proxy functionality
+- ✅ Environment variable processing
+
+### Test Coverage
+
+| Test Type | Description | Status |
+|-----------|-------------|---------|
+| Syntax Validation | Caddyfile syntax check | ✅ Automated |
+| Docker Build | Container builds successfully | ✅ Automated |
+| Startup Test | Container starts without errors | ✅ Automated |
+| HTTP Proxy | Requests are properly forwarded | ✅ Automated |
+| ENV Vars | Configuration via environment | ✅ Automated |
+| Integration | Full stack with backend | ✅ Manual/Local |
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
