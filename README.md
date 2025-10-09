@@ -404,10 +404,10 @@ git push origin v1.0.0
 ```
 
 **What happens:**
-- ✅ Git Tag wird erstellt und gepusht
-- ✅ Docker Images werden automatisch gebaut (latest + version)
-- ✅ GitHub Release wird manuell erstellt mit Release Notes
-- ✅ Release Notes werden automatisch aus Commits generiert
+- ✅ Git tag is created and pushed
+- ✅ Docker images are automatically built (latest + version)
+- ✅ GitHub Release is manually created with release notes
+- ✅ Release notes are automatically generated from commits
 
 ### Branch Protection
 
