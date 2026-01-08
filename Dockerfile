@@ -1,8 +1,9 @@
 FROM caddy:2-alpine
 
 # Create non-root user for security
-# The base image already includes a properly configured caddy user
-# with necessary capabilities for binding to ports 80 and 443
+RUN addgroup -g 1000 caddy && \
+    adduser -u 1000 -G caddy -h /home/caddy -D caddy && \
+    chown -R caddy:caddy /data /config /etc/caddy
 
 # Copy Caddyfile
 COPY --chown=caddy:caddy Caddyfile /etc/caddy/Caddyfile
