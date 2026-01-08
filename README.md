@@ -102,9 +102,8 @@ The following security headers are enabled by default:
 | `X-Content-Type-Options` | `nosniff` |
 | `X-Frame-Options` | `DENY` |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` |
-| `X-XSS-Protection` | `1; mode=block` |
 
-Use `CADDY_SECURITY_HEADERS` to add additional headers like `Permissions-Policy` or `Content-Security-Policy`.
+Use `CADDY_SECURITY_HEADERS` to add additional headers like `Content-Security-Policy` or `Permissions-Policy`.
 
 ## Examples
 

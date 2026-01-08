@@ -41,6 +41,7 @@ Key environment variables that configure the Caddyfile at runtime:
 - `CADDY_DOMAIN` (required) - Main domain to serve
 - `CADDY_UPSTREAM` - Backend server URL for reverse proxy
 - `CADDY_EMAIL` - Enables automatic HTTPS via Let's Encrypt
+- `CADDY_SECURITY_HEADERS` - Additional security headers (default headers: X-Content-Type-Options, X-Frame-Options, Referrer-Policy)
 - `CADDY_HEADERS`, `CADDY_RATE_LIMIT`, `CADDY_BASIC_AUTH`, `CADDY_REDIRECTS`, `CADDY_PROXY_HEADERS`, `CADDY_ADDITIONAL_DOMAINS` - Optional configuration blocks
 
 ## Git Hooks and Commit Convention

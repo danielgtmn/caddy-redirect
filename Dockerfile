@@ -14,6 +14,6 @@ USER caddy
 # Expose ports 80 and 443
 EXPOSE 80 443
 
-# Healthcheck for orchestration (Kubernetes, Docker Swarm)
+# Healthcheck using Caddy's admin API (works regardless of CADDY_DOMAIN)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:2019/config/ || exit 1
